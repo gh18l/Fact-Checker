@@ -3,7 +3,9 @@
 ⚡ Just one click to check if the tweets you see contain fake news using GPT-4o🤏. Automatically search for authoritative information sources from Internet to obtain the truth ⚡
 
 ## Simple Demo
-https://github.com/gh18l/Fact-Checker/blob/main/demo/demo.mp4
+https://github.com/user-attachments/assets/844ed518-f458-420c-9fff-1a978faa938a
+
+
 
 ## What it can do?
 
