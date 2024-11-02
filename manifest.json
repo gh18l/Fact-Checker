@@ -25,17 +25,17 @@
 	],
 	"action": {
 		"default_icon": {
-			"8": "images/icon8.png",
-			"16": "images/icon8.png",
-			"48": "images/icon8.png",
-			"128": "images/icon8.png"
+			"8": "assets/icon.png",
+			"16": "assets/icon.png",
+			"48": "assets/icon.png",
+			"128": "assets/icon.png"
 		}
 	},
 	"icons": {
-		"8": "images/icon8.png",
-		"16": "images/icon8.png",
-		"48": "images/icon8.png",
-		"128": "images/icon8.png"
+		"8": "assets/icon.png",
+		"16": "assets/icon.png",
+		"48": "assets/icon.png",
+		"128": "assets/icon.png"
 	},
 	"background": {
 		"service_worker": "background.js"
