@@ -1,52 +1,32 @@
-const devMode = false;
-
 window.addEventListener("load", () => {
-	console.log("Twitter bot running...");
-	if (devMode) {
-		console.log("Dev mode active");
-	}
-
-	async function fetchPostData(postData, responseDiv) {
-		if (!devMode) {
-			try {
-				fetch("https://factcheckerback.onrender.com/stream", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify(postData)
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.output) {
-						responseDiv.innerHTML = "";
-						const formattedText = convertMarkdownToHTML(data.output, data.image_url);
-						displayWithOpacityWave(formattedText, responseDiv);
-					} else {
-						responseDiv.innerHTML = "No result returned";
-					}
-				})
-				.catch(error => {
-					console.error("Error fetching the API: ", error);
-					responseDiv.innerHTML = "Error fetching the API";
-				});
-			} catch (error) {
-				console.error("Error in fetchPostData:", error);
-				responseDiv.innerHTML = "An error occurred. Please try reloading the page.";
-			}
-		} else {
-			// Dev mode code remains unchanged
-			setTimeout(() => {
-				let data = "Test response data for development mode.";
-				responseDiv.innerHTML = "";
-				const formattedText = convertMarkdownToHTML(data);
-				displayWithOpacityWave(formattedText, responseDiv);
-			}, 2000);
+	async function postRequest(input, output) {
+		try {
+			fetch("https://factcheckerback.onrender.com/stream", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(input)
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.output) {
+					output.innerHTML = "";
+					const htmlText = convertToHTML(data.output, data.image_url);
+					displayWithOpacityWave(htmlText, output);
+				} else {
+					output.innerHTML = "Something went wrong! Please try again";
+				}
+			})
+			.catch(error => {
+				output.innerHTML = "There seems to be some problem with the server, please contact: hanxyz1818@gmail.com";
+			});
+		} catch (error) {
+			output.innerHTML = "There seems to be some problem with the server, please contact hanxyz1818@gmail.com";
 		}
 	}
 
-	function addButtonToTweets() {
-		console.log("Adding button to tweets");
+	function start() {
 		const tweets = document.querySelectorAll("article[data-testid='tweet']");
 		tweets.forEach(tweet => {
 			if (tweet.querySelector(".custom-button")) {
@@ -63,22 +43,21 @@ window.addEventListener("load", () => {
 				buttonWrapper.appendChild(button);
 				buttonWrapper.className = "custom-button-wrapper";
 				button.className = "custom-button";
-				console.log("Adding button to tweet11");
-				button.addEventListener("click", event => triggerFunctionality(tweet, event, actionDiv));
+				button.addEventListener("click", event => parsingAndPost(tweet, event, actionDiv));
 
 				actionDiv.appendChild(buttonWrapper);
 			}
 		});
 	}
 
-	function triggerFunctionality(tweet, event, actionDiv) {
+	function parsingAndPost(tweet, event, actionDiv) {
 		event.stopPropagation();
 		var elements = tweet.querySelectorAll('[data-testid="tweetText"] img, [data-testid="tweetText"] span');
 		var tweetText = Array.from(elements).map(element => {
 			if (element.tagName.toLowerCase() === 'img') {
-				return element.alt;  // 对于 img 标签，返回 alt 属性
+				return element.alt;
 			} else if (element.tagName.toLowerCase() === 'span') {
-				return element.textContent;  // 对于 span 标签，返回包括所有嵌套文本的文本内容
+				return element.textContent;
 			}
 		});
 		console.log("tweetText", tweetText);
@@ -112,18 +91,17 @@ window.addEventListener("load", () => {
 			time: time
 		};
 		console.log("postData", postData);
-		fetchPostData(postData, responseDiv)
+		postRequest(postData, responseDiv)
 	}
 
-	setInterval(addButtonToTweets, 2000);
+	setInterval(start, 2000);
 });
 
 
 
-function convertMarkdownToHTML(markdown, imageURL) {
+function convertToHTML(text, imageURL) {
 	// Convert links
-	console.log("markdown", markdown);
-	let html = markdown.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+	let html = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
 	// Convert bold
 	html = html.replace(/\*\*([^\*]+)\*\*/g, "<strong>$1</strong>");
 	// Convert italics
@@ -138,9 +116,8 @@ function convertMarkdownToHTML(markdown, imageURL) {
 	// Convert newlines to paragraphs
 	html = html.replace(/\n\n/g, "</p><p>");
 
-	// Add an image if imageURL is provided
     if (imageURL) {
-        html += `<p><img src="${imageURL}" alt="Markdown Image"></p>`;
+        html += `<p><img src="${imageURL}" alt="image"></p>`;
     }
 	
 	return html;
@@ -158,20 +135,6 @@ function createLoadingAnimation() {
 	loadingContainer.appendChild(progressCircle);
 
 	return loadingContainer;
-}
-
-function removeLoadingAnimation(loadingContainer) {
-	return new Promise(resolve => {
-			loadingContainer.classList.remove("fade-in");
-			loadingContainer.addEventListener(
-				"transitionend",
-				() => {
-					loadingContainer.remove();
-					resolve();
-				},
-				{ once: true }
-			);
-		});
 }
 
 function displayWithOpacityWave(text, element) {
