@@ -4,7 +4,6 @@
 
 ## Simple Demo
 https://github.com/gh18l/CrawlGPT/assets/16774158/593fc8f3-71d1-45fb-aca1-0bfc6a92a996
-https://github.com/gh18l/Fact-Checker/blob/main/demo/demo.mp4
 
 ## What it can do?
 
