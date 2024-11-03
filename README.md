@@ -24,3 +24,6 @@ https://github.com/user-attachments/assets/844ed518-f458-420c-9fff-1a978faa938a
 ## Free limited use
 This is an experimental project for now, so it will be free to use. However, using GPT-4O in large quantities is too expensive😥, so the temporary solution is to limit each person to **20** uses per day.
 
+## Contact Me
+If you have any suggestions or want to communicate about AI(I am currently working as an LLM engineer in a technology company), please contact my email: **hanxyz1818@gmail.com**
+
